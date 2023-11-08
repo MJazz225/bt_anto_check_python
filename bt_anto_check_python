@@ -1,0 +1,64 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+import win32ui,win32con,pyHook,pythoncom,win32gui
+import time
+import pandas as pd
+from prettytable import PrettyTable
+import os
+
+
+os.system('start chrome.exe --remote-debugging-port=9222')
+driver = webdriver.Chrome()
+
+# 創建一個 Remote WebDriver 來連接到已經存在的瀏覽器窗口
+existing_browser_url = "https://bo.tsgol.org/real/main.do#"  # 這是 Selenium Grid 的 URL，你需要根據實際情況修改
+#driver = webdriver.Remote(command_executor=existing_browser_url, desired_capabilities={"browserName": "chrome"})
+driver.switch_to.window(existing_browser_url)
+
+# 连接到已经存在的窗口
+#driver.switch_to.window(window_to_control)
+
+
+# 找到排序按钮（根据CSS类名）
+sort_button = driver.find_element(By.XPATH,'//*[@id="yxui_main_accordion"]/div[3]/div[1]/div[1]') #報表管理
+sort_button.click()
+
+sort_button2 = driver.find_element(By.XPATH,'//*[@id="yxui_main_accordion"]/div[3]/div[2]/ul/li[2]/div') #交易報表
+sort_button2.click()
+
+button_id_group = driver.find_element(By.XPATH,'//*[@id="trade_report_queryForm"]/table/tbody/tr[1]/td[2]/button') #統一帳號組
+button_id_group.click()
+
+preapprovedreal = driver.find_element(By.XPATH,'//*[@id="ui-multiselect-customerGroupIdCM_tradeReport-option-3"]')
+preapprovedreal.click()
+
+realinactived = driver.find_element(By.XPATH,'//*[@id="ui-multiselect-customerGroupIdCM_tradeReport-option-7"]')
+realinactived.click()
+
+currency = driver.find_element(By.XPATH,'//*[@id="currencyTRLSearch"]') #帳戶貨幣
+currency.click()
+
+currencyUSD = driver.find_element(By.XPATH,'//*[@id="currencyTRLSearch"]/option[2]') #USD
+currencyUSD.click()
+
+tradingtype = driver.find_element(By.XPATH,'//*[@id="trade_report_queryForm"]/table/tbody/tr[2]/td[4]/button') #交易類型
+tradingtype.click()
+
+close1 = driver.find_element(By.XPATH,'//*[@id="reportTypeTRLSearch"]/option[4]') #平倉
+close2 = driver.find_element(By.XPATH,'//*[@id="reportTypeTRLSearch"]/option[5]') #強平
+close3 = driver.find_element(By.XPATH,'//*[@id="reportTypeTRLSearch"]/option[6]') #到期平倉
+
+close1.click()
+close2.click()
+close3.click()
+
+result = driver.find_element(By.XPATH,'//*[@id="trade_report_queryForm_search"]') #查詢
+result.click()
+
+# 等待一段时间，或等待排序完成（你可以根据需要自行调整等待时间）
+time.sleep(1)  # 这里等待了1秒
+
+
+
